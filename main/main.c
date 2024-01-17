@@ -16,7 +16,7 @@ typedef enum
 } event_signals_t;
 
 #define QUEUE_ITEM_COUNT (10)
-#define QUEUE_ITEM_SIZE (sizeof(dispatcher_base_t))
+#define QUEUE_ITEM_SIZE (sizeof(dispatcher_eventBase_t))
 
 static uint8_t pgQueueStorage[QUEUE_ITEM_COUNT * QUEUE_ITEM_SIZE] = {0};
 static uint8_t pgEventStorage[QUEUE_ITEM_SIZE] = {0};
