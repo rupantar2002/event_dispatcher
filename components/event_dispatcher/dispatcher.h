@@ -106,7 +106,7 @@ struct dispatcher_tagBase
 #define DISPATCHER_START(pDispatcher, userSignal) \
     dispatcher_Start((dispatcher_base_t *)(pDispatcher), (bool)(userSignal))
 
-#define DIPATCHER_EVENT_LOOP(pDispatcher) \
+#define DISPATCHER_EVENT_LOOP(pDispatcher) \
     dispatcher_EventLoop((dispatcher_base_t *)(pDispatcher))
 
 #define DISPATCHER_POST_EVENT(pDispatcher, pEvent) \

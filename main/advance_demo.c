@@ -218,7 +218,7 @@ void app_main(void)
          * @brief Caution for if someting broke avoid watchdog reset.
          *
          */
-        if (DIPATCHER_EVENT_LOOP(pgDispatcher) != DISPATCHER_ERR_CLEAR)
+        if (DISPATCHER_EVENT_LOOP(pgDispatcher) != DISPATCHER_ERR_CLEAR)
         {
             vTaskDelay(pdMS_TO_TICKS(10));
         }
