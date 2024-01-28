@@ -5,7 +5,8 @@
   "files.associations": {
     "*.h": "c",
     "compare": "c",
-    "*.tcc": "c"
+    "*.tcc": "c",
+    "regex": "c"
   },
   "idf.adapterTargetName": "esp32"
 }

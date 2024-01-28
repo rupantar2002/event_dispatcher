@@ -149,6 +149,11 @@ void app_main(void)
          */
         if(dispatcher_EventLoop(pgDispatcher)!=DISPATCHER_ERR_CLEAR){
             vTaskDelay(pdMS_TO_TICKS(10));
-        }
+        }else
+            /**
+             * @brief Intentionaly slowing the event process loop.
+             * 
+             */
+            vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
