@@ -1,5 +1,7 @@
-#include "dispatcher.h"
+#include <dispatcher.h>
 #include <string.h>
+
+static const char *TAG = __FILE__;
 
 uint8_t dispatcher_Init(dispatcher_base_t *const pDispatcher,
                         uint16_t itemSize,
@@ -10,13 +12,13 @@ uint8_t dispatcher_Init(dispatcher_base_t *const pDispatcher,
 {
     if (pDispatcher == NULL || queueStorage == NULL || eventStorage == NULL || defaultHandler == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,null pointer argument", __LINE__);
         return DISPATCHER_ERR_NULL_PTR;
     }
 
     if (itemSize == 0 || itemCount == 0)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,requied non zero arguments", __LINE__);
         return DISPATCHER_ERR_INVALID_ARGS;
     }
 
@@ -27,7 +29,7 @@ uint8_t dispatcher_Init(dispatcher_base_t *const pDispatcher,
                                             &pDispatcher->queueStack);
     if (pDispatcher->queue == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,queue initialization failed", __LINE__);
         return DISPATCHER_ERR_NOT_INITIALIZED;
     }
     pDispatcher->eventStorage = eventStorage;
@@ -41,13 +43,13 @@ uint8_t dispatcher_Start(dispatcher_base_t *const pDispatcher,
 
     if (pDispatcher == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,null pointer argument", __LINE__);
         return DISPATCHER_ERR_NULL_PTR;
     }
 
     if (pDispatcher->active == NULL || pDispatcher->queue == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,dispatcher not initialized", __LINE__);
         return DISPATCHER_ERR_NOT_INITIALIZED;
     }
 
@@ -68,19 +70,19 @@ uint8_t dispatcher_EventLoop(dispatcher_base_t *const pDispatcher)
 {
     if (pDispatcher == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,null pointer argument", __LINE__);
         return DISPATCHER_ERR_NULL_PTR;
     }
 
     if (pDispatcher->active == NULL || pDispatcher->queue == NULL || pDispatcher->eventStorage == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,dispatcher not initialized", __LINE__);
         return DISPATCHER_ERR_NOT_INITIALIZED;
     }
 
     if (xQueueReceive(pDispatcher->queue, pDispatcher->eventStorage, portMAX_DELAY) != pdTRUE)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,dequeue operation failed", __LINE__);
         return DISPATCHER_ERR_PROCESS_FAIL;
     }
 
@@ -102,7 +104,7 @@ uint8_t dispatcher_EventLoop(dispatcher_base_t *const pDispatcher)
         }
         else
         {
-            // TODO log
+            DISPATCHER_LOG_ERROR(TAG, "%d,invalid transition request,handler is NULL", __LINE__);
             ret = DISPATCHER_ERR_PROCESS_FAIL;
         }
     }
@@ -115,32 +117,41 @@ uint8_t dispatcher_Post(dispatcher_base_t *const pDispatcher,
 {
     if (pDispatcher == NULL || pEvent == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,null pointer argument", __LINE__);
         return DISPATCHER_ERR_NULL_PTR;
     }
 
     if (pDispatcher->queue == NULL)
     {
-        // TODO log
+        DISPATCHER_LOG_ERROR(TAG, "%d,dispatcher not initialized", __LINE__);
         return DISPATCHER_ERR_NOT_INITIALIZED;
     }
 
     uint8_t ret = DISPATCHER_ERR_CLEAR;
+
+    // TODO event posting timeout is 100 ms should be changed or
+    // defined as a macro to make it user friendly
     BaseType_t state = xQueueSend(pDispatcher->queue, (void *)pEvent, pdMS_TO_TICKS(100));
 
     if (state != pdTRUE)
     {
         if (state == errQUEUE_FULL)
+        {
+            DISPATCHER_LOG_ERROR(TAG, "%d,queue overflow", __LINE__);
             ret = DISPATCHER_ERR_QUEUE_FULL;
+        }
         else
+        {
+            DISPATCHER_LOG_ERROR(TAG, "%d,process failed", __LINE__);
             ret = DISPATCHER_ERR_PROCESS_FAIL;
+        }
     }
     return ret;
 }
 
 uint8_t dispatcher_PostFromIsr(dispatcher_base_t *const pDispatcher,
                                dispatcher_eventBase_t const *const pEvent,
-                               uint8_t flags)
+                               int flags)
 {
 
     if (pDispatcher == NULL || pEvent == NULL)
@@ -152,7 +163,6 @@ uint8_t dispatcher_PostFromIsr(dispatcher_base_t *const pDispatcher,
     {
         return DISPATCHER_ERR_NOT_INITIALIZED;
     }
-
     uint8_t ret = DISPATCHER_ERR_CLEAR;
     BaseType_t state = xQueueSendFromISR(pDispatcher->queue, (void *)pEvent, flags);
 

@@ -30,7 +30,7 @@ uint8_t StateHandler1(dispatcher_base_t *pDispatcher, dispatcher_eventBase_t con
 {
     dispatcher_smStatus_t status = 0;
 
-    switch (DISPATCHER_GET_SIGNAL(pEvent)) // TODO compress in macro DISPATCHER_EVENT_SIGNAL.
+    switch (DISPATCHER_GET_SIGNAL(pEvent)) 
     {
     case DISPATCHER_SIGNAL_ENTRY:
     {
@@ -82,7 +82,7 @@ uint8_t StateHandler2(dispatcher_base_t *pDispatcher, dispatcher_eventBase_t con
 {
     dispatcher_smStatus_t status = 0;
 
-    switch (DISPATCHER_GET_SIGNAL(pEvent)) // TODO compress in macro DISPATCHER_EVENT_SIGNAL.
+    switch (DISPATCHER_GET_SIGNAL(pEvent)) 
     {
     case DISPATCHER_SIGNAL_ENTRY:
     {
@@ -143,6 +143,12 @@ void app_main(void)
 
     while (1)
     {
-        dispatcher_EventLoop(pgDispatcher);
+        /**
+         * @brief Caution for if someting broke avoid watchdog reset
+         * 
+         */
+        if(dispatcher_EventLoop(pgDispatcher)!=DISPATCHER_ERR_CLEAR){
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
     }
 }

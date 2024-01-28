@@ -1,7 +1,7 @@
 # Event Dispatcher
 ##### Event Dispatcher is an event driven finite state machine which is flexiable enough to implement in any embedded project and has an inherent ability to add flexibility of event driven state machine in an embedded application.
 
-Here the implementaion is for esp-idf framework and free-rtos dependent
+### Here the implementaion is for esp-idf framework and free-rtos dependent
 
 # Features
 - Queue base event buffer.
