@@ -26,7 +26,7 @@ uint8_t dispatcher_Init(dispatcher_base_t *const pDispatcher,
     pDispatcher->queue = xQueueCreateStatic(itemCount,
                                             itemSize,
                                             queueStorage,
-                                            &pDispatcher->queueStack);
+                                            &pDispatcher->queueStorage);
     if (pDispatcher->queue == NULL)
     {
         DISPATCHER_LOG_ERROR(TAG, "%d,queue initialization failed", __LINE__);
