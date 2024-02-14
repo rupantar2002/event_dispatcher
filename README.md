@@ -326,7 +326,7 @@ uint8_t StateHandler1(appDispatcher_t *const pDispatcher, appEvent_t const *cons
 }
 ```
 
-4. Initialize and start dispatcher.
+8. Initialize and start dispatcher.
 
 ```c
 void main(void)
@@ -351,7 +351,7 @@ void main(void)
 
 ```
 
-3. Post event from function.
+9. Post event from function.
 
 ```c
     void function(){
@@ -368,7 +368,7 @@ void main(void)
 
 ```
 
-3. Post event from isr.
+10. Post event from isr.
 
 ```c
 
