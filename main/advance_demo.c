@@ -225,7 +225,7 @@ void app_main(void)
         else
         {
             /**
-             * @brief Intentionaly slowing the event loop.
+             * @brief Intentionaly slowing the event loop for better view.
              *
              */
             vTaskDelay(pdMS_TO_TICKS(1000));
