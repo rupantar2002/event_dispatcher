@@ -6,9 +6,13 @@
 # Features
 - Queue base event buffer.
 - Operation synchronization.
-- Easy to implement custom events with custom data.
+- Can be used in ISR functions.
+- Easy to implement custom events with custom parameters.
 - Multiple state handler support
 - Thread safty (i.e rtos queue).
+- Error Logging support.
+- Error handling support.
+
 
 # Basic Operation
 
